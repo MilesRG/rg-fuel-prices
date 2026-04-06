@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>RG Fuel Prices — Live Petrol & Diesel Near You</title>
+  <title>RG Fuel Prices â Live Petrol & Diesel Near You</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -30,7 +30,7 @@
       min-height: 100vh;
     }
 
-    /* ── Header ── */
+    /* ââ Header ââ */
     header {
       background: linear-gradient(135deg, var(--navy) 0%, #1e3a5f 100%);
       color: var(--white);
@@ -61,7 +61,7 @@
     .btn-secondary:hover { background: rgba(255,255,255,0.25); }
     .btn:disabled  { opacity: 0.55; cursor: not-allowed; }
 
-    /* ── Fuel tabs ── */
+    /* ââ Fuel tabs ââ */
     .fuel-tabs {
       display: flex; gap: 6px; padding: 16px 24px 0;
       overflow-x: auto; scrollbar-width: none;
@@ -75,7 +75,7 @@
     .fuel-tab:hover  { border-color: #3b82f6; color: #3b82f6; }
     .fuel-tab.active { background: #3b82f6; border-color: #3b82f6; color: white; }
 
-    /* ── Status bar ── */
+    /* ââ Status bar ââ */
     .status-bar {
       display: flex; align-items: center; justify-content: space-between;
       padding: 12px 24px; font-size: 0.8rem; color: var(--muted);
@@ -92,7 +92,7 @@
     @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
     @keyframes spin  { to{transform:rotate(360deg)} }
 
-    /* ── Summary cards ── */
+    /* ââ Summary cards ââ */
     .summary {
       display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
       gap: 12px; padding: 16px 24px;
@@ -108,16 +108,50 @@
     .val-amber { color: var(--amber); }
     .val-red   { color: var(--red);   }
 
-    /* ── Map ── */
-    #map {
-      height: 400px; margin: 0 24px 16px; border-radius: var(--radius);
-      box-shadow: var(--shadow); border: 1px solid var(--border); overflow: hidden;
+    /* ââ Two-column main layout ââ */
+    .main-content {
+      display: flex;
+      gap: 16px;
+      padding: 0 24px 40px;
+      align-items: flex-start;
     }
 
-    /* ── Filter bar ── */
+    /* ââ Map column (left, sticky) ââ */
+    .map-col {
+      flex: 0 0 55%;
+      position: sticky;
+      top: 16px;
+    }
+
+    #map {
+      width: 100%;
+      height: calc(100vh - 270px);
+      min-height: 520px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    /* ââ List column (right, scrollable) ââ */
+    .list-col {
+      flex: 1;
+      min-width: 0;
+    }
+
+    /* ââ Banner ââ */
+    .banner {
+      margin-bottom: 12px; padding: 12px 16px;
+      border-radius: var(--radius); font-size: 0.82rem;
+      display: flex; gap: 10px; align-items: flex-start;
+    }
+    .banner.info { background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; }
+    .banner-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+    /* ââ Filter bar ââ */
     .filter-bar {
       display: flex; align-items: center; justify-content: space-between;
-      padding: 4px 24px 12px; flex-wrap: wrap; gap: 8px;
+      padding: 0 0 10px; flex-wrap: wrap; gap: 8px;
     }
     .filter-bar h2 { font-size: 1rem; font-weight: 700; }
     .filter-group  { display: flex; align-items: center; gap: 8px; }
@@ -128,8 +162,8 @@
     .filter-bar label { font-size: 0.8rem; color: var(--muted); }
     #radiusVal { font-size: 0.8rem; font-weight: 600; min-width: 40px; }
 
-    /* ── Station list ── */
-    .stations { padding: 0 24px 40px; display: flex; flex-direction: column; gap: 10px; }
+    /* ââ Station list ââ */
+    .stations { display: flex; flex-direction: column; gap: 10px; }
 
     .station-card {
       background: var(--white); border-radius: var(--radius); padding: 14px 16px;
@@ -168,7 +202,7 @@
       border-radius: 50%; margin-right: 5px; vertical-align: middle;
     }
 
-    /* ── Skeleton ── */
+    /* ââ Skeleton ââ */
     .skeleton {
       background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%);
       background-size: 200% 100%; animation: shimmer 1.4s infinite; border-radius: 6px;
@@ -178,15 +212,6 @@
       background: var(--white); border-radius: var(--radius); padding: 14px 16px;
       box-shadow: var(--shadow); display: flex; gap: 12px; align-items: center;
     }
-
-    /* ── Banner ── */
-    .banner {
-      margin: 0 24px 14px; padding: 12px 16px;
-      border-radius: var(--radius); font-size: 0.82rem;
-      display: flex; gap: 10px; align-items: flex-start;
-    }
-    .banner.info { background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; }
-    .banner-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
 
     .empty { text-align: center; padding: 48px 24px; color: var(--muted); }
     .empty .emoji { font-size: 48px; margin-bottom: 12px; }
@@ -198,10 +223,27 @@
     }
     footer a { color: #3b82f6; text-decoration: none; }
 
-    @media (max-width: 480px) {
-      header, .fuel-tabs, .summary, .filter-bar, .stations { padding-left: 16px; padding-right: 16px; }
-      #map { margin-left: 16px; margin-right: 16px; height: 300px; }
-      .banner { margin-left: 16px; margin-right: 16px; }
+    /* ââ Responsive: stack on small screens ââ */
+    @media (max-width: 768px) {
+      .main-content {
+        flex-direction: column;
+        padding: 0 16px 32px;
+      }
+      .map-col {
+        flex: none;
+        width: 100%;
+        position: static;
+      }
+      #map {
+        height: 320px;
+        min-height: 280px;
+      }
+      .list-col { width: 100%; }
+      header, .fuel-tabs, .summary, .status-bar { padding-left: 16px; padding-right: 16px; }
+    }
+
+    @media (min-width: 769px) and (max-width: 1024px) {
+      .map-col { flex: 0 0 50%; }
     }
   </style>
 </head>
@@ -209,15 +251,15 @@
 
 <header>
   <div class="header-top">
-    <div class="logo">⛽</div>
+    <div class="logo">â½</div>
     <div class="brand">
       <h1>RG Fuel Prices</h1>
       <p>Live petrol &amp; diesel prices across the RG region</p>
     </div>
   </div>
   <div class="search-bar">
-    <input type="text" id="searchInput" placeholder="Search by postcode, town or brand (e.g. RG1, Reading, Shell)" />
-    <button class="btn btn-secondary" id="nearMeBtn" onclick="APP.findNearMe()">📍 Near Me</button>
+    <input type="text" id="searchInput" placeholder="Search by postcode, town or brand (e.g. RG9 1SR, Reading, Shell)" />
+    <button class="btn btn-secondary" id="nearMeBtn" onclick="APP.findNearMe()">ð Near Me</button>
   </div>
 </header>
 
@@ -229,31 +271,44 @@
 </div>
 
 <div class="status-bar">
-  <div><span class="status-dot loading" id="statusDot"></span><span id="statusText">Loading prices…</span></div>
+  <div><span class="status-dot loading" id="statusDot"></span><span id="statusText">Loading pricesâ¦</span></div>
   <div id="lastUpdated"></div>
 </div>
 
 <div class="summary" id="summary"></div>
-<div id="banner"></div>
-<div id="map"></div>
 
-<div class="filter-bar">
-  <h2 id="listTitle">Stations</h2>
-  <div class="filter-group">
-    <label>Radius:</label>
-    <input type="range" id="radiusSlider" min="5" max="50" value="50" step="5"
-           oninput="document.getElementById('radiusVal').textContent=this.value+'mi'; APP.applyFilters()">
-    <span id="radiusVal">50mi</span>
-    <label style="margin-left:8px">Sort:</label>
-    <select id="sortSelect" onchange="APP.applyFilters()">
-      <option value="price">Price ↑</option>
-      <option value="brand">Brand A–Z</option>
-    </select>
-    <span id="listCount" style="color:var(--muted);font-size:0.8rem"></span>
+<!-- Two-column layout: map left, list right -->
+<div class="main-content">
+
+  <!-- Left: sticky map -->
+  <div class="map-col">
+    <div id="map"></div>
   </div>
-</div>
 
-<div class="stations" id="stationList"></div>
+  <!-- Right: banner + filters + station list -->
+  <div class="list-col">
+    <div id="banner"></div>
+
+    <div class="filter-bar">
+      <h2 id="listTitle">Stations</h2>
+      <div class="filter-group">
+        <label>Radius:</label>
+        <input type="range" id="radiusSlider" min="5" max="50" value="50" step="5"
+               oninput="document.getElementById('radiusVal').textContent=this.value+'mi'; APP.applyFilters()">
+        <span id="radiusVal">50mi</span>
+        <label style="margin-left:8px">Sort:</label>
+        <select id="sortSelect" onchange="APP.applyFilters()">
+          <option value="price">Price â</option>
+          <option value="brand">Brand AâZ</option>
+        </select>
+        <span id="listCount" style="color:var(--muted);font-size:0.8rem"></span>
+      </div>
+    </div>
+
+    <div class="stations" id="stationList"></div>
+  </div>
+
+</div>
 
 <footer>
   Data sourced from <a href="https://checkfuelprices.co.uk" target="_blank">CheckFuelPrices.co.uk</a>
@@ -264,8 +319,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script>
 const APP = {
-  allStations:  [],       // full dataset from JSON
-  filtered:     [],       // currently displayed
+  allStations:  [],
+  filtered:     [],
   markers:      [],
   map:          null,
   selectedFuel: 'E10',
@@ -280,7 +335,7 @@ const APP = {
     'independent':'#6366f1','default':'#94a3b8',
   },
 
-  // ── Boot ─────────────────────────────────────
+  // ââ Boot âââââââââââââââââââââââââââââââââââââ
   async init() {
     this.initMap();
     await this.loadData();
@@ -290,13 +345,13 @@ const APP = {
   initMap() {
     this.map = L.map('map').setView([51.4543, -0.9781], 10);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© <a href="https://openstreetmap.org">OpenStreetMap</a>', maxZoom: 18,
+      attribution: 'Â© <a href="https://openstreetmap.org">OpenStreetMap</a>', maxZoom: 18,
     }).addTo(this.map);
   },
 
-  // ── Load the static JSON ──────────────────────
+  // ââ Load the static JSON ââââââââââââââââââââââ
   async loadData() {
-    this.setStatus('loading', 'Loading price data…');
+    this.setStatus('loading', 'Loading price dataâ¦');
     this.renderSkeletons();
     try {
       const res  = await fetch('./data/stations.json');
@@ -314,42 +369,45 @@ const APP = {
       }
 
       if (this.allStations.length === 0) {
-        this.setStatus('error', 'No station data available yet — check back soon.');
+        this.setStatus('error', 'No station data available yet â check back soon.');
         this.renderEmpty('Data file is empty. The GitHub Action may not have run yet.');
         return;
       }
 
       this.setStatus('live', `${this.allStations.length} stations loaded for RG region`);
-      this.setBanner('info', 'ℹ️',
+      this.setBanner('info', 'â¹ï¸',
         `Showing <strong>${this.allStations.length} stations</strong> across the RG region. ` +
-        `Prices updated automatically twice daily. Use <strong>📍 Near Me</strong> to sort by your location.`
+        `Prices updated automatically twice daily. Use <strong>ð Near Me</strong> to sort by your location.`
       );
       this.applyFilters();
 
     } catch (err) {
       console.error(err);
       this.setStatus('error', 'Could not load price data.');
-      this.renderEmpty('Price data not found. The GitHub Action may not have run yet — check the Actions tab in your repository.');
-      this.setBanner('info', '⚙️',
-        '<strong>First run:</strong> Go to your GitHub repository → Actions tab → "Update RG Fuel Prices" → ' +
+      this.renderEmpty('Price data not found. The GitHub Action may not have run yet â check the Actions tab in your repository.');
+      this.setBanner('info', 'âï¸',
+        '<strong>First run:</strong> Go to your GitHub repository â Actions tab â "Update RG Fuel Prices" â ' +
         '"Run workflow" to fetch prices for the first time.'
       );
     }
   },
 
-  // ── Filter & sort ─────────────────────────────
+  // ââ Filter & sort âââââââââââââââââââââââââââââ
   applyFilters() {
     const fuel     = this.selectedFuel;
-    const query    = (document.getElementById('searchInput').value || '').toLowerCase().trim();
+    const rawQuery = (document.getElementById('searchInput').value || '').trim();
+    const query    = rawQuery.toLowerCase();
+    // Normalised query with spaces stripped (helps postcode matching like "RG91SR" â "rg91sr")
+    const normQuery = query.replace(/\s/g, '');
     const maxMiles = parseFloat(document.getElementById('radiusSlider').value);
     const sort     = document.getElementById('sortSelect').value;
 
     let stations = this.allStations.filter(s => s.prices && s.prices[fuel] != null);
 
-    // Search filter
+    // Search filter â normalise postcode spaces for comparison
     if (query) {
       stations = stations.filter(s =>
-        (s.postcode || '').toLowerCase().includes(query) ||
+        (s.postcode || '').replace(/\s/g,'').toLowerCase().includes(normQuery) ||
         (s.address  || '').toLowerCase().includes(query) ||
         (s.brand    || '').toLowerCase().includes(query) ||
         (s.name     || '').toLowerCase().includes(query)
@@ -374,7 +432,7 @@ const APP = {
     this.renderAll();
   },
 
-  // ── Render ────────────────────────────────────
+  // ââ Render ââââââââââââââââââââââââââââââââââââ
   renderAll() {
     const fuel     = this.selectedFuel;
     const stations = this.filtered;
@@ -408,14 +466,18 @@ const APP = {
       if (!s.lat || !s.lng) return;
       const price  = s.prices[this.selectedFuel];
       const colour = this.priceColour(price, avg);
+      const label  = price.toFixed(1) + 'p';
+      // Fixed iconSize wide enough for any price string; iconAnchor centres it
       const icon   = L.divIcon({
         className: '',
-        html: `<div style="background:${colour};color:white;border-radius:16px;padding:4px 8px;font-size:12px;font-weight:800;box-shadow:0 2px 6px rgba(0,0,0,.3);white-space:nowrap;border:2px solid white">${price.toFixed(1)}p</div>`,
-        iconAnchor: [20, 10],
+        html: `<div style="background:${colour};color:white;border-radius:16px;padding:5px 10px;font-size:12px;font-weight:800;box-shadow:0 2px 6px rgba(0,0,0,.35);white-space:nowrap;border:2px solid white;display:inline-block;text-align:center;min-width:52px;">${label}</div>`,
+        iconSize:   [68, 28],
+        iconAnchor: [34, 14],
+        popupAnchor:[0, -16],
       });
       const marker = L.marker([s.lat, s.lng], { icon })
         .addTo(this.map)
-        .bindPopup(`<strong>${this.esc(s.name)}</strong><br>${this.esc(s.address)}<br><span style="font-size:1.2em;font-weight:bold;color:${colour}">${price.toFixed(1)}p/litre</span>${s.dist ? `<br><small>📍 ${s.dist.toFixed(1)} miles away</small>` : ''}`);
+        .bindPopup(`<strong>${this.esc(s.name)}</strong><br>${this.esc(s.address)}<br><span style="font-size:1.2em;font-weight:bold;color:${colour}">${label}/litre</span>${s.dist ? `<br><small>ð ${s.dist.toFixed(1)} miles away</small>` : ''}`);
       this.markers.push(marker);
       bounds.push([s.lat, s.lng]);
     });
@@ -433,21 +495,21 @@ const APP = {
 
     const el = document.getElementById('stationList');
     if (!this.filtered.length) {
-      el.innerHTML = '<div class="empty"><div class="emoji">🔍</div><p>No stations match your search.</p></div>';
+      el.innerHTML = '<div class="empty"><div class="emoji">ð</div><p>No stations match your search.</p></div>';
       return;
     }
 
     el.innerHTML = this.filtered.map((s, i) => {
       const price    = s.prices[fuel];
       const diff     = price - avg;
-      const diffSign = diff < 0 ? '▼' : '▲';
+      const diffSign = diff < 0 ? 'â¼' : 'â²';
       const diffCls  = diff < 0 ? 'diff-good' : 'diff-bad';
       const tier     = i === 0 ? 'cheapest' : i === this.filtered.length-1 ? 'priciest' : Math.abs(diff) < 2 ? 'mid-price' : diff < 0 ? 'cheapest' : 'priciest';
       const rankCls  = i === 0 ? 'rank-1' : i === 1 ? 'rank-2' : i === 2 ? 'rank-3' : 'rank-n';
-      const rankLbl  = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `#${i+1}`;
+      const rankLbl  = i === 0 ? 'ð¥' : i === 1 ? 'ð¥' : i === 2 ? 'ð¥' : `#${i+1}`;
       const bKey     = (s.brand||'').toLowerCase().replace(/[^a-z]/g,'');
       const bColour  = this.brandColours[bKey] || this.brandColours.default;
-      const distStr  = s.dist ? `📍 ${s.dist.toFixed(1)} miles away` : s.postcode || '';
+      const distStr  = s.dist ? `ð ${s.dist.toFixed(1)} miles away` : s.postcode || '';
 
       return `
         <div class="station-card ${tier}" onclick="APP.focusStation(${i})">
@@ -484,18 +546,18 @@ const APP = {
   },
 
   renderEmpty(msg) {
-    document.getElementById('stationList').innerHTML = `<div class="empty"><div class="emoji">⚙️</div><p>${msg}</p></div>`;
+    document.getElementById('stationList').innerHTML = `<div class="empty"><div class="emoji">âï¸</div><p>${msg}</p></div>`;
     document.getElementById('summary').innerHTML = '';
   },
 
-  // ── User interactions ─────────────────────────
+  // ââ User interactions âââââââââââââââââââââââââ
   findNearMe() {
     if (!navigator.geolocation) { alert('Geolocation not supported.'); return; }
     const btn = document.getElementById('nearMeBtn');
-    btn.textContent = '📍 Locating…'; btn.disabled = true;
+    btn.textContent = 'ð Locatingâ¦'; btn.disabled = true;
     navigator.geolocation.getCurrentPosition(
       pos => {
-        btn.textContent = '📍 Near Me'; btn.disabled = false;
+        btn.textContent = 'ð Near Me'; btn.disabled = false;
         this.userLat = pos.coords.latitude;
         this.userLng = pos.coords.longitude;
         document.getElementById('sortSelect').value = 'price';
@@ -505,7 +567,7 @@ const APP = {
         this.applyFilters();
         this.map.setView([this.userLat, this.userLng], 13);
       },
-      () => { btn.textContent = '📍 Near Me'; btn.disabled = false; alert('Could not get your location.'); },
+      () => { btn.textContent = 'ð Near Me'; btn.disabled = false; alert('Could not get your location.'); },
       { timeout: 10000 }
     );
   },
@@ -515,7 +577,10 @@ const APP = {
     if (!s) return;
     this.map.setView([s.lat, s.lng], 15);
     this.markers[index]?.openPopup();
-    window.scrollTo({ top: document.getElementById('map').offsetTop - 10, behavior: 'smooth' });
+    // On mobile, scroll to map; on desktop the map is already visible
+    if (window.innerWidth < 769) {
+      window.scrollTo({ top: document.getElementById('map').offsetTop - 10, behavior: 'smooth' });
+    }
   },
 
   setFuel(fuel, tabEl) {
@@ -525,15 +590,45 @@ const APP = {
     this.applyFilters();
   },
 
+  // ââ Search & postcode geocoding âââââââââââââââ
   bindSearch() {
     let timer;
-    document.getElementById('searchInput').addEventListener('input', () => {
+    document.getElementById('searchInput').addEventListener('input', (e) => {
       clearTimeout(timer);
-      timer = setTimeout(() => this.applyFilters(), 250);
+      const val = e.target.value.trim();
+      timer = setTimeout(() => {
+        // Detect UK postcode pattern (full or partial) and geocode it
+        const isFullPostcode = /^[A-Z]{1,2}\d{1,2}\s?\d[A-Z]{2}$/i.test(val);
+        if (isFullPostcode) {
+          this.geocodeAndCenter(val);
+        } else {
+          this.applyFilters();
+        }
+      }, 350);
     });
   },
 
-  // ── Helpers ───────────────────────────────────
+  async geocodeAndCenter(postcode) {
+    const normalized = postcode.replace(/\s/g, '').toUpperCase();
+    try {
+      const res  = await fetch(`https://api.postcodes.io/postcodes/${normalized}`);
+      const data = await res.json();
+      if (data.status === 200 && data.result) {
+        this.userLat = data.result.latitude;
+        this.userLng = data.result.longitude;
+        document.getElementById('radiusSlider').value = 10;
+        document.getElementById('radiusVal').textContent = '10mi';
+        this.applyFilters();
+        this.map.setView([this.userLat, this.userLng], 13);
+        return;
+      }
+    } catch (e) {
+      // geocode failed silently â just do a text filter
+    }
+    this.applyFilters();
+  },
+
+  // ââ Helpers âââââââââââââââââââââââââââââââââââ
   haversine(lat1, lng1, lat2, lng2) {
     const R = 3958.8, dLat = (lat2-lat1)*Math.PI/180, dLng = (lng2-lng1)*Math.PI/180;
     const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)**2;
